@@ -1,0 +1,5 @@
+src/robotarm/.idea/*
+src/robotarm/cmake-build-debug/*
+src/robotarm/build/*
+src/robotarm/install/*
+src/robotarm/log/*
