@@ -11,9 +11,9 @@ Logger::Logger(): Node("Logger"){
 }
 
 void Logger::loginfo(const std_msgs::msg::String::SharedPtr message) const {
-    RCLCPP_INFO(this->get_logger(), "'%s'", message->data.c_str());
+    RCLCPP_INFO(this->get_logger(), "STATE: '%s'", message->data.c_str());
 }
 
 void Logger::logdebug(const std_msgs::msg::String::SharedPtr message) const {
-    RCLCPP_DEBUG(this->get_logger(), "'%s'", message->data.c_str());
+    RCLCPP_DEBUG(this->get_logger(), "EVENT: '%s'", message->data.c_str());
 }

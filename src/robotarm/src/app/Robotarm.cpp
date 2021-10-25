@@ -4,10 +4,9 @@
  * @author wilricknl (https://github.com/wilricknl)
  */
 #include "../../include/robotarm/app/Robotarm.hpp"
-#include "../../include/robotarm/app/Timer.hpp"
 
 Robotarm::Robotarm(std::unique_ptr<ILowLevelDriver> lowLevelDriver)
-    : Node("RobotarmNode"), IHighLevelDriver(std::move(lowLevelDriver)), executionTimer(std::chrono::seconds{5})
+    : Node("RobotarmNode"), IHighLevelDriver(std::move(lowLevelDriver))
 {
     queueTimer = this->create_wall_timer(
             std::chrono::milliseconds(10),
@@ -43,11 +42,11 @@ void Robotarm::commandCallback(const std_msgs::msg::String::SharedPtr msg)
     }
     if(bInitialized) {
         if (msg->data == "park") {
-            addCommandsToQueue(positionToServoCommands(Position::PARK, 2000));
+            addCommandsToQueue(positionToServoCommands(Position::PARK, 1200));
         } else if (msg->data == "ready") {
-            addCommandsToQueue(positionToServoCommands(Position::READY, 2000));
+            addCommandsToQueue(positionToServoCommands(Position::READY, 1200));
         } else if (msg->data == "straightup") {
-            addCommandsToQueue(positionToServoCommands(Position::STRAIGHTUP, 2000));
+            addCommandsToQueue(positionToServoCommands(Position::STRAIGHTUP, 1200));
         }
     }
     publishMessage(msg->data, Logtype::DEBUG);
@@ -56,7 +55,7 @@ void Robotarm::commandCallback(const std_msgs::msg::String::SharedPtr msg)
 
 void Robotarm::initialize() {
     bInitialized = true;
-    getLowLevelDriver()->servosPosition(positionToServoCommands(Position::PARK, 2300));
+    getLowLevelDriver()->servosPosition(positionToServoCommands(Position::PARK, 6000));
     publishMessage("Initialisatie", Logtype::INFO);
 }
 
@@ -170,18 +169,19 @@ void Robotarm::positionCallback(const robotarm::msg::Position::SharedPtr message
 }
 
 void Robotarm::queueTimerCallback() {
-    static bool bPrint = false;
-    static float duration = 0.0f;
-    if (executionTimer.Finished() and not isQueueEmpty())
+    static bool bPrint = true; // Check om paraat status printen
+    bool bMoving = getLowLevelDriver()->isMoving();
+
+    if (not bMoving and bPrint)
     {
-        auto commands = runQueue();
-        duration = commands.getTime()/1000;
-        bPrint = true;
-        publishMessage("Servos bewegen naar volgende posities : " + commands.toString(), Logtype::INFO);
-        executionTimer.Reset();
-    }
-    if(executionTimer.Time() >= duration and bPrint and bInitialized){
         publishMessage("Paraat", Logtype::INFO);
         bPrint = false;
+    }
+
+    if (not bMoving and not isQueueEmpty())
+    {
+        auto commands = runQueue();
+        publishMessage("Servos bewegen naar volgende posities : " + commands.toString(), Logtype::INFO);
+        bPrint = true;
     }
 }

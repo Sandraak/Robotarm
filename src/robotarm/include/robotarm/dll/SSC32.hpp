@@ -46,6 +46,13 @@ public:
      * @param channel The servo to be stopped
      */
     void stopServo(char channel) override;
+
+    /**
+     * @brief Check if robotarm is moving
+     *
+     * @return `true` if moving, else `false`
+     */
+    virtual bool isMoving() override;
 };
 
 #endif //ROBOTARM_SSC32_H

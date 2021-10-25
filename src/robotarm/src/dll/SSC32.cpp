@@ -27,3 +27,7 @@ void SSC32::stopServo(char channel) {
     std::string command = "STOP" + std::to_string(channel);
     getSerial().send(command);
 }
+
+bool SSC32::isMoving() {
+    return getSerial().queryMovementStatus() == '+';
+}

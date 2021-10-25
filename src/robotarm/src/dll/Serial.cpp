@@ -60,3 +60,12 @@ void Serial::write(std::string const& command, char eol)
     boost::asio::write(serial, buffer.data());
     os.flush();
 }
+
+char Serial::queryMovementStatus() {
+    write("Q", '\r');
+
+    char data = 0;
+    boost::asio::read(serial, boost::asio::buffer(&data, 1));
+
+    return data;
+}

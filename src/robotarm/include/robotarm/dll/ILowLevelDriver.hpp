@@ -45,6 +45,13 @@ public:
     virtual void servosPosition(ServoCommands commands) = 0;
 
     /**
+     * @brief Check if robotarm is moving
+     *
+     * @return `true` if moving, else `false`
+     */
+    virtual bool isMoving() = 0;
+
+    /**
      * @brief Stop a servo
      *
      * @param channel The servo to be stopped

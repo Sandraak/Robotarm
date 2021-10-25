@@ -53,6 +53,13 @@ public:
     void cancel(std::string const& command);
 
     /**
+     * @brief Query if the robot is still moving
+     *
+     * @return '+' if moving, else '.'
+     */
+    char queryMovementStatus();
+
+    /**
      * @brief Get the USB device name
      *
      * @return USB device name

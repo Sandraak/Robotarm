@@ -65,7 +65,7 @@ namespace demo
         message.wrist = getInput("\tWrist (degrees): ", value) ? value : 404;
         message.gripper = getInput("\tGripper (degrees): ", value) ? value : 404;
         message.rotate = getInput("\tRotate (degrees): ", value) ? value : 404;
-        message.time = getInput("\tTime (milliseconds): ", value) ? value : 2000;
+        message.time = getInput("\tTime (milliseconds): ", value) ? value : 1;
         positionPublisher->publish(message);
     }
 

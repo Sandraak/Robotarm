@@ -12,7 +12,6 @@
 #include "robotarm/msg/position.hpp"
 #include "IHighLevelDriver.hpp"
 #include "Logger.hpp"
-#include "Timer.hpp"
 
 /**
  * @brief The high level driver
@@ -113,7 +112,6 @@ private:
      */
     void positionCallback(const robotarm::msg::Position::SharedPtr message);
 private:
-    utility::SecTimer executionTimer; ///< Timer to keep track of queue execution
     rclcpp::TimerBase::SharedPtr queueTimer; ///< Queue callback timer
     rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscriber; ///< Subscriber to common commands
     rclcpp::Subscription<robotarm::msg::Position>::SharedPtr positionSubscriber; ///< Subscriber to custom position commands
